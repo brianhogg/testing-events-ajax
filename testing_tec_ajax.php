@@ -67,6 +67,8 @@ add_action( 'wp_ajax_testing_calendar_events', 'ajax_testing_get_calendar_events
 add_action( 'wp_ajax_nopriv_testing_calendar_events', 'ajax_testing_get_calendar_events' );
 
 function testing_fetch_events( $atts ) {
+    ajax_testing_get_calendar_events();
+
     return '<div><button id="ecs-testing-events">Test Events</button></div>';
 }
 add_shortcode( 'testing-events', 'testing_fetch_events' );
