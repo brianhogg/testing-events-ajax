@@ -48,6 +48,7 @@ function ajax_testing_get_calendar_events() {
         }
         $retval[] = [
             'id' => $post->ID,
+            'event_date_from_post_object' => $post->event_date,
             'details' => tribe_events_template_data( $post ),
             'title' => get_the_title(),
             'start' => tribe_get_start_date( null, false, 'Y-m-d' ) . ( ( ! tribe_event_is_all_day() ) ? 'T' . tribe_get_start_time( null, 'H:i:s' ) : '' ),
