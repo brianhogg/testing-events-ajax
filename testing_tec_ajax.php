@@ -13,6 +13,8 @@ Text Domain: the-events-calendar-shortcode
 */
 
 function ajax_testing_get_calendar_events() {
+    global $post;
+
     $atts = array_map( 'sanitize_text_field', $_POST );
     if ( ! isset( $atts['buttonlink'] ) ) {
         $atts['buttonlink'] = '';
@@ -21,7 +23,7 @@ function ajax_testing_get_calendar_events() {
     $posts = tribe_get_events( [
         'post_status' => 'publish',
         'hide_upcoming' => true,
-        'posts_per_page' => 500,
+        'posts_per_page' => 50,
         'tax_query' => '',
         'meta_key' => '_EventStartDate',
         'orderby' => 'event_date',
@@ -45,6 +47,7 @@ function ajax_testing_get_calendar_events() {
             }
         }
         $retval[] = [
+            'id' => $post->ID,
             'details' => tribe_events_template_data( $post ),
             'title' => get_the_title(),
             'start' => tribe_get_start_date( null, false, 'Y-m-d' ) . ( ( ! tribe_event_is_all_day() ) ? 'T' . tribe_get_start_time( null, 'H:i:s' ) : '' ),
@@ -56,7 +59,7 @@ function ajax_testing_get_calendar_events() {
             'excerpt' => tribe_events_get_the_excerpt( $post->ID, null, true ),
         ];
     }
-
+    wp_reset_postdata();
     wp_send_json( [ 'events' => $retval ] );
 }
 add_action( 'wp_ajax_testing_calendar_events', 'ajax_testing_get_calendar_events' );
